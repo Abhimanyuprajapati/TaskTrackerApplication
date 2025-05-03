@@ -1,9 +1,11 @@
 import { useState } from 'react';
-import { Menu, X, Home, LogOut, Settings, HelpCircle } from 'lucide-react';
+import { Menu, X, Home, LogOut, BarChart2, Settings, HelpCircle } from 'lucide-react';
 
 // Dashboard component
 export default function Dashboard() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  // const { data, isLoading, isError } = useQuery(['tasks'], fetchTasks);
   
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
@@ -13,6 +15,9 @@ export default function Dashboard() {
     localStorage.removeItem('token');
     window.location.href = '/login';
   }
+
+  // if (isLoading) return <p>Loading...</p>;
+  // if (isError) return <p>Error loading tasks</p>;
 
   return (
     <div className="flex h-screen bg-gray-100 w-full">
@@ -42,7 +47,7 @@ export default function Dashboard() {
         
         <nav className="mt-5 px-2">
           <SidebarLink icon={<Home size={20} />} label="Home" active />
-          {/* <SidebarLink icon={<BarChart2 size={20} />} label="Analytics" /> */}
+          <SidebarLink icon={<BarChart2 size={20} />} label="Project" />
           <SidebarLink icon={<Settings size={20} />} label="Settings" />
           <SidebarLink icon={<HelpCircle size={20} />} label="Help" />
           <SidebarLink icon={<LogOut size={20} />} label="Logout"  onClick={handleLogout}/>
@@ -99,7 +104,7 @@ export default function Dashboard() {
           
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             <div className="bg-white rounded-lg shadow p-4">
-              <h2 className="text-lg font-medium mb-4">Quick Stats</h2>
+              <h2 className="text-lg font-medium mb-4">Project</h2>
               <p className="text-gray-600">Sample chart or data visualization would go here.</p>
               <div className="h-48 bg-gray-100 mt-4 rounded flex items-center justify-center">
                 Chart placeholder
@@ -109,11 +114,11 @@ export default function Dashboard() {
               <h2 className="text-lg font-medium mb-4">Notifications</h2>
               <div className="space-y-3">
                 <NotificationItem 
-                  title="System Update"
-                  description="System update scheduled for tomorrow at 2:00 AM"
+                  title="Project Update"
+                  description="New project is available for Client A"
                   type="info"
                 />
-                <NotificationItem 
+                {/* <NotificationItem 
                   title="Disk Space Low"
                   description="Server running low on available disk space"
                   type="warning"
@@ -122,7 +127,7 @@ export default function Dashboard() {
                   title="New Feature Available"
                   description="Check out the new reporting dashboard"
                   type="success"
-                />
+                /> */}
               </div>
             </div>
           </div>

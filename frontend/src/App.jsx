@@ -1,4 +1,5 @@
 import { Routes, Route } from 'react-router-dom';
+import { Toaster } from 'react-hot-toast';
 import Login from './components/Login';
 import Register from './components/register';
 import Privacy from './components/privacy';
@@ -10,6 +11,7 @@ import Dashboard from './container/Dashboard';
 function App() {
   return (
     <>
+    <Toaster />
     <Routes>
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />

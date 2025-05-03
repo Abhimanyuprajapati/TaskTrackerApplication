@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import '../css/Login.css';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import Toaster from '../toaster/Toaster';
 
 function Login() {
   const { login } = useAuth();
@@ -38,10 +39,12 @@ function Login() {
       const response = await login(form);
       // If using axios, check for response status
       if (response.status === 200) {
+        Toaster("Login successful", "success");
         navigator('/'); // Redirect to home page or dashboard
       } else {
         // Handle known server errors
         setServerError(response.response?.data?.message || 'Login failed.');
+        Toaster("Login failed", "failure");
       }
     } catch (error) {
       setServerError('An unexpected error occurred.');
