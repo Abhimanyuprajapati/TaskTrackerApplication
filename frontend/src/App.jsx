@@ -4,8 +4,8 @@ import Register from './components/register';
 import Privacy from './components/privacy';
 import Terms from './components/Terms';
 import ForgotPassword from './components/ForgotPassword';
-import { Dashboard } from './container/Dashboard';
 import ProtectedRoute from './services/ProtectedRoute';
+import Dashboard from './container/Dashboard';
 
 function App() {
   return (

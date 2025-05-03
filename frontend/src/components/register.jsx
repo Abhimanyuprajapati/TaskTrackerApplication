@@ -56,6 +56,7 @@ function Register() {
   };
 
   return (
+    <div className="register">
     <div className="Register-container">
       <h2>Register</h2>
       <form onSubmit={handleSubmit} noValidate>
@@ -128,6 +129,7 @@ function Register() {
           <a href="/privacy">Privacy Statement</a>
         </p>
       </div>
+    </div>
     </div>
   );
 }

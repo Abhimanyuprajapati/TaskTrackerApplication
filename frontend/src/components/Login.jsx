@@ -51,6 +51,7 @@ function Login() {
   };
 
   return (
+    <div className='login'>
     <div className="login-container">
       <h2>Login</h2>
       <form onSubmit={handleSubmit}>
@@ -103,6 +104,7 @@ function Login() {
           <a href="/privacy">Privacy Statement</a>
         </p>
       </div>
+    </div>
     </div>
   );
 }
