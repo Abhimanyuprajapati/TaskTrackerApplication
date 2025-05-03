@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import '../css/register.css'; 
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import Toaster from '../toaster/Toaster';
 function Register() {
     const { register } = useAuth(); // Assuming you have a register function in your AuthContext
     const navigator = useNavigate(); // Use useNavigate from react-router-dom
@@ -45,7 +46,8 @@ function Register() {
       const response = await register(form);
       console.log("response",response)
       if (response.status === 201) {
-        alert('Registration successful!'); // Handle successful registration
+        // alert('Registration successful!'); // Handle successful registration
+        Toaster("Registration successful!", "success");
         navigator('/'); // Redirect to login page
       } else {
         setErrors({ server: response.data.message || 'Registration failed.' });
