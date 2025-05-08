@@ -66,10 +66,10 @@ export default function Dashboard() {
               <Menu size={24} />
             </button>
             <div className="text-lg font-medium">TaskTracker Application</div>
-            {/* <div className="h-8 w-8 rounded-full bg-gray-300">
-              {/* User Avatar Placeholder
+            <div className="h-8 w-8 rounded-full bg-gray-300">
+              {/*User Avatar Placeholder */}
         
-            </div> */}
+            </div>
           </div>
         </header>
         
