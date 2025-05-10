@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import Toaster from '../toaster/Toaster';
 import Otp from './Otp';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 function Register() {
   const { register, otpSender, verifyOTP } = useAuth();
@@ -15,7 +16,7 @@ function Register() {
     country: '',
     password: ''
   });
-
+const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState({});
   const [emailVerified, setEmailVerified] = useState(false);
   const [otpModalOpen, setOtpModalOpen] = useState(false);
@@ -172,18 +173,33 @@ function Register() {
           </div>
 
           <div className="form-group">
-            <label htmlFor="password">Password</label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              placeholder="Enter Password"
-              value={form.password}
-              onChange={handleChange}
-              required
-            />
-            <div className="error">{errors.password}</div>
-          </div>
+  <label htmlFor="password">Password</label>
+  <div style={{ position: 'relative' }}>
+    <input
+      type={showPassword ? 'text' : 'password'}
+      id="password"
+      name="password"
+      placeholder="Enter Password"
+      value={form.password}
+      onChange={handleChange}
+      required
+    />
+    <span
+      onClick={() => setShowPassword(!showPassword)}
+      style={{
+        position: 'absolute',
+        right: '10px',
+        top: '50%',
+        transform: 'translateY(-50%)',
+        cursor: 'pointer',
+        color: '#555'
+      }}
+    >
+        {showPassword ? <FaEye /> : <FaEyeSlash />}
+    </span>
+  </div>
+  <div className="error">{errors.password}</div>
+</div>
 
           <div className="form-group">
             <input

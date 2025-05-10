@@ -3,6 +3,7 @@ import '../css/Login.css';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import Toaster from '../toaster/Toaster';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 function Login() {
   const { login } = useAuth();
@@ -11,6 +12,7 @@ function Login() {
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [serverError, setServerError] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
 
   const validate = () => {
     const newErrors = {};
@@ -72,18 +74,33 @@ function Login() {
           <div className="error" id="identifierError">{errors.identifier}</div>
         </div>
 
-        <div className="form-group">
+          <div className="form-group">
           <label htmlFor="password">Password</label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            placeholder="Enter Password"
-            value={form.password}
+          <div style={{ position: 'relative' }}>
+            <input
+              type={showPassword ? 'text' : 'password'}
+              id="password"
+              name="password"
+              placeholder="Enter Password"
+               value={form.password}
             onChange={handleChange}
-            required
-          />
-          <div className="error" id="passwordError">{errors.password}</div>
+              required
+            />
+            <span
+              onClick={() => setShowPassword(!showPassword)}
+              style={{
+                position: 'absolute',
+                right: '10px',
+                top: '50%',
+                transform: 'translateY(-50%)',
+                cursor: 'pointer',
+                color: '#555'
+              }}
+            >
+                {showPassword ? <FaEye /> : <FaEyeSlash />}
+            </span>
+          </div>
+          <div className="error">{errors.password}</div>
         </div>
 
         {serverError && <div className="error">{serverError}</div>}
