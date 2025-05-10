@@ -95,7 +95,7 @@ function Login() {
 
       <div className="footer">
         <p>
-          New here? <a href="/verifyemail">Create an Account</a>
+          New here? <a href="/register">Create an Account</a>
         </p>
         <p>
           <a href="/forgot-password">Forgot Password?</a>

@@ -20,7 +20,7 @@ export const AuthProvider = ({ children }) => {
       }
       return response;
     } catch (error) {
-      return error;
+       return error.response;
     }
   };
 
@@ -31,9 +31,31 @@ export const AuthProvider = ({ children }) => {
       });
       return response;
     } catch (error) {
-      return error;
-    }
+      return error.response;
+      }
   };
+
+  const otpSender = async (data) =>{
+    try{
+  const response = await axios.post(`${FROENTEND_URL}/send-otp`, data, {
+        headers: { "Content-Type": "application/json" },
+      });
+      return response;
+    }catch(error){
+       return error.response;
+    }
+  }
+
+    const verifyOTP = async (data) =>{
+    try{
+  const response = await axios.post(`${FROENTEND_URL}/verify-otp`, data, {
+        headers: { "Content-Type": "application/json" },
+      });
+      return response;
+    }catch(error){
+       return error.response;
+    }
+  }
 
   const logout = async (data) => {
     const localStorageToken = sessionStorage.getItem("token");
@@ -47,7 +69,7 @@ export const AuthProvider = ({ children }) => {
       syncSessionStorage();
       return response;
     } catch (error) {
-      throw new Error(error.response?.data?.message || "Logout error");
+      return error.response;
     }
   };
 
@@ -56,6 +78,8 @@ export const AuthProvider = ({ children }) => {
       value={{
         login,
         register,
+        otpSender,
+        verifyOTP,
       }}
     >
       {children}

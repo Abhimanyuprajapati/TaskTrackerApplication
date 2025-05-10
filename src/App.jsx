@@ -7,7 +7,6 @@ import Terms from './components/Terms';
 import ForgotPassword from './components/ForgotPassword';
 import ProtectedRoute from './services/ProtectedRoute';
 import Dashboard from './container/Dashboard';
-import { VerifyEmail } from './components/VerifyEmail';
 
 function App() {
   return (
@@ -15,7 +14,6 @@ function App() {
     <Toaster />
     <Routes>
       <Route path="/login" element={<Login />} />
-       <Route path="/verifyemail" element={<VerifyEmail />} />
       <Route path="/register" element={<Register />} />
       <Route path="/Privacy" element={<Privacy />} />
       <Route path="/terms" element={<Terms />} />
