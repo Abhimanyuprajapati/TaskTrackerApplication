@@ -1,18 +1,13 @@
 import React, { createContext, useContext } from "react";
-import axios from "axios";
+import api from "./axios";
 
-
-const FROENTEND_URL = import.meta.env.VITE_BASE_FRONTEND_URL;
 const AuthContext = createContext();
+
 export const AuthProvider = ({ children }) => {
 
-  console.log("FROENTEND_URL",FROENTEND_URL)
   const login = async (data) => {
     try {
-      const response = await axios.post(`${FROENTEND_URL}/login`, data, {
-        headers: { "Content-Type": "application/json" },
-      });
-
+      const response = await api.post("/login", data);
       console.log("response", response);
       if (response.status === 200) {
         localStorage.setItem("token", response.data.user.token); // Store token in session storage
@@ -26,9 +21,7 @@ export const AuthProvider = ({ children }) => {
 
   const register = async (data) => {
     try {
-      const response = await axios.post(`${FROENTEND_URL}/register`, data, {
-        headers: { "Content-Type": "application/json" },
-      });
+      const response = await api.post("/register", data);
       return response;
     } catch (error) {
       return error.response;
@@ -37,21 +30,35 @@ export const AuthProvider = ({ children }) => {
 
   const otpSender = async (data) =>{
     try{
-  const response = await axios.post(`${FROENTEND_URL}/send-otp`, data, {
-        headers: { "Content-Type": "application/json" },
-      });
+  const response = await  api.post("/send-otp", data);
       return response;
     }catch(error){
        return error.response;
     }
   }
 
-    const verifyOTP = async (data) =>{
+  const verifyOTP = async (data) =>{
     try{
-  const response = await axios.post(`${FROENTEND_URL}/verify-otp`, data, {
-        headers: { "Content-Type": "application/json" },
-      });
+  const response = await api.post("/verify-otp", data)
       return response;
+    }catch(error){
+       return error.response;
+    }
+  }
+
+    const projectDetailCount = async () =>{
+    try{
+  const response = await api.get("/projects/countrevenuepending");
+       return response;
+    }catch(error){
+       return error.response;
+    }
+  }
+
+  const recentActivity = async () =>{
+    try{
+  const response = await api.get("/activity/recent");
+       return response;
     }catch(error){
        return error.response;
     }
@@ -60,12 +67,7 @@ export const AuthProvider = ({ children }) => {
   const logout = async (data) => {
     const localStorageToken = sessionStorage.getItem("token");
     try {
-      const response = await axios.post(`${FROENTEND_URL}/logout`, data, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorageToken}`,
-        },
-      });
+      const response = await api.post("/logout", data);
       syncSessionStorage();
       return response;
     } catch (error) {
@@ -80,6 +82,8 @@ export const AuthProvider = ({ children }) => {
         register,
         otpSender,
         verifyOTP,
+        projectDetailCount,
+        recentActivity,
       }}
     >
       {children}

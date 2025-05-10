@@ -1,12 +1,29 @@
 import { useState } from 'react';
 import { Menu, X, Home, LogOut, BarChart2, Settings, HelpCircle } from 'lucide-react';
+import { useQuery } from '@tanstack/react-query';
+import { useAuth } from '../context/AuthContext';
 
 // Dashboard component
 export default function Dashboard() {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const { projectDetailCount, recentActivity } = useAuth(); // after importing useAuth()
+  const [sidebarOpen, setSidebarOpen] = useState(false);     
 
-  // const { data, isLoading, isError } = useQuery(['tasks'], fetchTasks);
-  
+ // Use different query keys for each query
+  const { data: projectData, isLoading: projectLoading, isError: projectError } = useQuery({
+    queryKey: ['projectCount'],
+    queryFn: projectDetailCount,
+  });
+
+  const { data: activityData, isLoading: activityLoading, isError: activityError } = useQuery({
+    queryKey: ['recentActivity'],
+    queryFn: recentActivity,
+  });
+
+  console.log('Project Data:', projectData);
+  console.log('Activity Data:', activityData);
+
+  // console.log("data", data.data);
+
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
   };
@@ -16,8 +33,9 @@ export default function Dashboard() {
     window.location.href = '/login';
   }
 
-  // if (isLoading) return <p>Loading...</p>;
-  // if (isError) return <p>Error loading tasks</p>;
+  // Handle loading and error states for each query
+  if (projectLoading || activityLoading) return <p>Loading...</p>;
+  if (projectError || activityError) return <p>Error loading data</p>;
 
   return (
     <div className="flex h-screen bg-gray-100 w-full">
@@ -76,15 +94,15 @@ export default function Dashboard() {
         {/* Dashboard Content */}
         <main className="flex-1 overflow-auto p-4">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
-            <DashboardCard title="Total Project" value="8" color="bg-blue-500" />
-            <DashboardCard title="Revenue" value="$15,670" color="bg-green-500" />
-            <DashboardCard title="Pending" value="24%" color="bg-purple-500" />
+            <DashboardCard title="Total Project"   value={projectData?.projectCount || '0'}  color="bg-blue-500" />
+            <DashboardCard title="Revenue"   value={projectData?.revenue || '0'} color="bg-green-500" />
+            <DashboardCard title="Pending" value="0%" color="bg-purple-500" />
           </div>
           
           <div className="bg-white rounded-lg shadow p-4 mb-4">
             <h2 className="text-lg font-medium mb-4">Recent Activity</h2>
             <div className="space-y-3">
-              <ActivityItem 
+              {/* <ActivityItem 
                 title="New user registered"
                 time="2 minutes ago"
                 description="John Smith created a new account"
@@ -98,7 +116,17 @@ export default function Dashboard() {
                 title="Server maintenance"
                 time="5 hours ago"
                 description="Server maintenance completed successfully"
-              />
+              /> */}
+            <ul>
+  {Array.isArray(activityData?.data).lenght ? (
+    activityData.data.map((activity) => (
+      <li key={activity.id}>{activity.description}</li>
+    ))
+  ) : (
+    <li>No activity found.</li>
+  )}
+</ul>
+
             </div>
           </div>
           
