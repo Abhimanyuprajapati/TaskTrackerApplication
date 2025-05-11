@@ -2,10 +2,11 @@ import { useState } from 'react';
 import { Menu, X, Home, LogOut, BarChart2, Settings, HelpCircle } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { useAuth } from '../context/AuthContext';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 // Dashboard component
 export default function Dashboard() {
-  const { projectDetailCount, recentActivity } = useAuth(); // after importing useAuth()
+  const { projectDetailCount, recentActivity, notification } = useAuth(); // after importing useAuth()
   const [sidebarOpen, setSidebarOpen] = useState(false);     
 
  // Use different query keys for each query
@@ -19,8 +20,21 @@ export default function Dashboard() {
     queryFn: recentActivity,
   });
 
+    const { data: notificationData, isLoading: notificationLoading, isError: notificationError } = useQuery({
+    queryKey: ['notification'],
+    queryFn: notification,
+  });
+
   console.log('Project Data:', projectData);
   console.log('Activity Data:', activityData);
+  console.log('notificationData:', notificationData);
+
+  const data = [
+  { name: 'Client A', projects: 5 },
+  { name: 'Client B', projects: 2 },
+  { name: 'Client C', projects: 6 },
+];
+
 
   // console.log("data", data.data);
 
@@ -131,31 +145,37 @@ export default function Dashboard() {
           </div>
           
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            <div className="bg-white rounded-lg shadow p-4">
-              <h2 className="text-lg font-medium mb-4">Project</h2>
-              <p className="text-gray-600">Sample chart or data visualization would go here.</p>
-              <div className="h-48 bg-gray-100 mt-4 rounded flex items-center justify-center">
-                Chart placeholder
-              </div>
-            </div>
+
+             <div className="bg-white rounded-lg shadow p-4">
+      <h2 className="text-lg font-medium mb-4">Project</h2>
+      <p className="text-gray-600">Sample visualization of Project.</p>
+      <div className="h-48 bg-gray-100 mt-4 rounded">
+        <ResponsiveContainer width="100%" height="100%">
+          <BarChart data={data}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="name" />
+            <YAxis />
+            <Tooltip />
+            <Bar dataKey="projects" fill="#3b82f6" />
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
+    </div>
+
             <div className="bg-white rounded-lg shadow p-4">
               <h2 className="text-lg font-medium mb-4">Notifications</h2>
               <div className="space-y-3">
-                <NotificationItem 
-                  title="Project Update"
-                  description="New project is available for Client A"
-                  type="info"
-                />
-                {/* <NotificationItem 
-                  title="Disk Space Low"
-                  description="Server running low on available disk space"
-                  type="warning"
-                />
-                <NotificationItem 
-                  title="New Feature Available"
-                  description="Check out the new reporting dashboard"
-                  type="success"
-                /> */}
+        
+  {notificationData?.data?.map((iteme, index) => (
+    <NotificationItem
+      key={index}
+      title={iteme.title}
+      description={iteme.message}
+      type={iteme.type} 
+    />
+  ))}
+
+
               </div>
             </div>
           </div>
