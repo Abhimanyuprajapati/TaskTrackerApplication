@@ -1,13 +1,9 @@
-import { useState } from 'react';
-import { Menu, X, Home, LogOut, BarChart2, Settings, HelpCircle } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { useAuth } from '../context/AuthContext';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
-// Dashboard component
-export default function Dashboard() {
-  const { projectDetailCount, recentActivity, notification } = useAuth(); // after importing useAuth()
-  const [sidebarOpen, setSidebarOpen] = useState(false);     
+export const Dashboard = () => {
+     const { projectDetailCount, recentActivity, notification } = useAuth();
 
  // Use different query keys for each query
   const { data: projectData, isLoading: projectLoading, isError: projectError } = useQuery({
@@ -38,75 +34,12 @@ export default function Dashboard() {
 
   // console.log("data", data.data);
 
-  const toggleSidebar = () => {
-    setSidebarOpen(!sidebarOpen);
-  };
-
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    window.location.href = '/login';
-  }
-
   // Handle loading and error states for each query
   if (projectLoading || activityLoading) return <p>Loading...</p>;
   if (projectError || activityError) return <p>Error loading data</p>;
-
   return (
-    <div className="flex h-screen bg-gray-100 w-full">
-      {/* Mobile sidebar backdrop */}
-      {sidebarOpen && (
-        <div 
-          className="fixed inset-0 z-20 bg-black bg-opacity-50 lg:hidden"
-          onClick={toggleSidebar}
-        />
-      )}
-      
-      {/* Sidebar */}
-      <div className={`
-        fixed inset-y-0 left-0 z-30 w-64 bg-gray-800 text-white transform transition-transform duration-300 ease-in-out
-        ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} 
-        lg:translate-x-0 lg:static lg:z-0
-      `}>
-        <div className="flex items-center justify-between h-16 px-4 border-b border-gray-700">
-          <div className="text-xl font-bold">Dashboard</div>
-          <button 
-            className="p-1 rounded-md lg:hidden hover:bg-gray-700"
-            onClick={toggleSidebar}
-          >
-            <X size={24} />
-          </button>
-        </div>
-        
-        <nav className="mt-5 px-2">
-          <SidebarLink icon={<Home size={20} />} label="Home" active />
-          <SidebarLink icon={<BarChart2 size={20} />} label="Project" />
-          <SidebarLink icon={<Settings size={20} />} label="Settings" />
-          <SidebarLink icon={<HelpCircle size={20} />} label="Help" />
-          <SidebarLink icon={<LogOut size={20} />} label="Logout"  onClick={handleLogout}/>
-        </nav>
-      </div>
-      
-      {/* Main Content */}
-      <div className="flex-1 flex flex-col overflow-hidden">
-        {/* Topbar */}
-        <header className="bg-white shadow-sm z-10">
-          <div className="h-16 px-4 flex items-center justify-between">
-            <button 
-              className="p-1 rounded-md lg:hidden hover:bg-gray-200"
-              onClick={toggleSidebar}
-            >
-              <Menu size={24} />
-            </button>
-            <div className="text-lg font-medium">TaskTracker Application</div>
-            <div className="h-8 w-8 rounded-full bg-gray-300">
-              {/*User Avatar Placeholder */}
-        
-            </div>
-          </div>
-        </header>
-        
-        {/* Dashboard Content */}
-        <main className="flex-1 overflow-auto p-4">
+   <>
+    <main className="flex-1 overflow-auto p-4">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
             <DashboardCard title="Total Project"   value={projectData?.projectCount || '0'}  color="bg-blue-500" />
             <DashboardCard title="Revenue"   value={projectData?.revenue || '0'} color="bg-green-500" />
@@ -180,27 +113,10 @@ export default function Dashboard() {
             </div>
           </div>
         </main>
-      </div>
-    </div>
-  );
+   </>
+  )
 }
 
-// Helper Components
-function SidebarLink({ icon, label, active = false, onClick }) {
-  return (
-    <a 
-      href="#" 
-      onClick={onClick}
-      className={`
-        flex items-center px-4 py-2 mt-1 text-sm rounded-md 
-        ${active ? 'bg-gray-700' : 'hover:bg-gray-700'}
-      `}
-    >
-      <span className="mr-3">{icon}</span>
-      <span>{label}</span>
-    </a>
-  );
-}
 
 function DashboardCard({ title, value, color }) {
   return (
