@@ -9,6 +9,8 @@ import ProtectedRoute from './services/ProtectedRoute';
 import { ProjectDetail } from './components/ProjectDetail';
 import { Dashboard } from './components/Dashboard';
 import MainLayout from './container/MainLayout';
+import { Setting } from './components/Setting';
+import { Help } from './components/Help';
 
 function App() {
   return (
@@ -26,6 +28,8 @@ function App() {
           <Route element={<MainLayout />}>
             <Route path="/" element={<Dashboard />} />
             <Route path="/project" element={<ProjectDetail />} />
+             <Route path="/settings" element={<Setting />} />
+              <Route path="/help" element={<Help />} />
           </Route>
         </Route>
       </Routes>
