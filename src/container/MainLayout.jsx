@@ -58,7 +58,11 @@ export default function MainLayout () {
   <SidebarLink icon={<BarChart2 size={20} />} label="Project" to="/project" />
   <SidebarLink icon={<Settings size={20} />} label="Settings" to="/settings" />
   <SidebarLink icon={<HelpCircle size={20} />} label="Help" to="/help" />
-  <SidebarLink icon={<LogOut size={20} />} label="Logout" to="/logout" />
+   <SidebarLink 
+    icon={<LogOut size={20} />} 
+    label="Logout" 
+    customClick={handleLogout}
+  />
 </nav>
 
       </div>
@@ -108,7 +112,7 @@ export default function MainLayout () {
 //   );
 // }
 
-function SidebarLink({ icon, label, to }) {
+function SidebarLink({ icon, label, to, customClick }) {
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -116,17 +120,19 @@ function SidebarLink({ icon, label, to }) {
 
   const handleClick = (e) => {
     e.preventDefault();
-    navigate(to);
+    if (customClick) {
+      customClick(); // Call custom logic for logout
+    } else {
+      navigate(to);  // Default behavior for regular links
+    }
   };
 
   return (
     <a 
-      href={to} 
+      href={to || '#'} 
       onClick={handleClick}
-      className={`
-        flex items-center px-4 py-2 mt-1 text-sm rounded-md 
-        ${isActive ? 'bg-gray-700 text-white' : 'hover:bg-gray-700 text-gray-300'}
-      `}
+      className={`flex items-center px-4 py-2 mt-1 text-sm rounded-md 
+        ${isActive ? 'bg-gray-700 text-white' : 'hover:bg-gray-700 text-gray-300'}`}
     >
       <span className="mr-3">{icon}</span>
       <span>{label}</span>

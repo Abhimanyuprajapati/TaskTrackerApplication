@@ -74,6 +74,24 @@ export const AuthProvider = ({ children }) => {
   }
 
 
+  const fetchProjectById = async (id) => {
+     try{
+  const response = await api.get(`/project/${id}`);
+    return response;
+    }catch(error){
+       return error.response;
+    }
+};
+
+  const fetchProject = async () => {
+     try{
+  const response = await api.get("/projects");
+    return response;
+    }catch(error){
+       return error.response;
+    }
+};
+
   const logout = async (data) => {
     const localStorageToken = sessionStorage.getItem("token");
     try {
@@ -93,6 +111,8 @@ export const AuthProvider = ({ children }) => {
         otpSender,
         verifyOTP,
         projectDetailCount,
+        fetchProjectById,
+        fetchProject,
         recentActivity,
         notification,
       }}
