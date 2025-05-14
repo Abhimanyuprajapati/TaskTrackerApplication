@@ -57,6 +57,7 @@ export const Dashboard = () => {
       <li key={activity._id}>
         <ActivityItem
           title={activity.title}
+          status={activity.action}
           time={`${formatDistanceToNow(new Date(activity.timestamp), { addSuffix: true })}`}
           description={activity.description}
         />
@@ -125,13 +126,14 @@ function DashboardCard({ title, value, color }) {
   );
 }
 
-function ActivityItem({ title, time, description }) {
+function ActivityItem({ title, time, description,status }) {
   return (
     <div className="border-b border-gray-100 pb-2">
       <div className="flex justify-between">
         <h4 className="text-sm font-medium max-w-xs truncate">{title}</h4>
         <span className="text-xs text-gray-500">{time}</span>
       </div>
+       <p className="text-sm text-gray-600 max-w-xs truncate">{status}</p>
       <p className="text-sm text-gray-600 max-w-xs truncate">{description}</p>
     </div>
   );

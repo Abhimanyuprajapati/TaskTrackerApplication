@@ -11,6 +11,7 @@ import { Dashboard } from './components/Dashboard';
 import MainLayout from './container/MainLayout';
 import { Setting } from './components/Setting';
 import { Help } from './components/Help';
+import { SingleProject } from './components/SingleProject';
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
           <Route element={<MainLayout />}>
             <Route path="/" element={<Dashboard />} />
             <Route path="/project" element={<ProjectDetail />} />
+             <Route path="/project/:id" element={<SingleProject />} />
              <Route path="/settings" element={<Setting />} />
               <Route path="/help" element={<Help />} />
           </Route>

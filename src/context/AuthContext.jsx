@@ -92,6 +92,24 @@ export const AuthProvider = ({ children }) => {
     }
 };
 
+  const markProjectAsComplete = async (id) => {
+     try{
+  const response = await api.put(`/project/${id}/complete`);
+    return response;
+    }catch(error){
+       return error.response;
+    }
+};
+
+  const deleteProject = async (id) => {
+     try{
+  const response = await api.delete(`/project/${id}`);
+    return response;
+    }catch(error){
+       return error.response;
+    }
+};
+
   const logout = async (data) => {
     const localStorageToken = sessionStorage.getItem("token");
     try {
@@ -114,6 +132,8 @@ export const AuthProvider = ({ children }) => {
         fetchProjectById,
         fetchProject,
         recentActivity,
+        markProjectAsComplete,
+        deleteProject,
         notification,
       }}
     >

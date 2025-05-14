@@ -1,10 +1,11 @@
-import { useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { useAuth } from '../context/AuthContext';
 import { formatDistanceToNow } from 'date-fns';
 
 export const ProjectDetail = () => {
   const { fetchProject } = useAuth();
+  const Navigate = useNavigate();
 
   const {
     data: AllProject,
@@ -14,6 +15,10 @@ export const ProjectDetail = () => {
     queryKey: ['allProject'],
     queryFn: fetchProject,
   });
+
+  const handleNavigator = (id) => {
+    Navigate(`/project/${id}`);
+  }
 
   if (ProjectLoading) return <p>Loading project...</p>;
   if (projectError) return <p>Something went wrong while fetching the project.</p>;
@@ -51,7 +56,9 @@ export const ProjectDetail = () => {
           </thead>
           <tbody>
             {AllProject.data?.map((project) => (
-              <tr key={project._id} className="hover:bg-gray-50">
+              <tr key={project._id}
+                className="hover:bg-gray-50 cursor-pointer"
+                onClick={() => handleNavigator(project._id)}>
                 <td className="px-4 py-2 border-b max-w-xs truncate" title={project.title}>
                   {project.title}
                 </td>
