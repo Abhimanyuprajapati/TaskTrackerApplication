@@ -1,6 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
 import { useAuth } from '../context/AuthContext';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { formatDistanceToNow } from 'date-fns';
+
 
 export const Dashboard = () => {
      const { projectDetailCount, recentActivity, notification } = useAuth();
@@ -35,44 +37,37 @@ export const Dashboard = () => {
   // console.log("data", data.data);
 
   // Handle loading and error states for each query
-  if (projectLoading || activityLoading) return <p>Loading...</p>;
-  if (projectError || activityError) return <p>Error loading data</p>;
+  if (projectLoading || activityLoading || notificationLoading) return <p>Loading...</p>;
+  if (projectError || activityError || notificationError) return <p>Error loading data</p>;
   return (
    <>
     <main className="flex-1 overflow-auto p-4">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
-            <DashboardCard title="Total Project"   value={projectData?.projectCount || '0'}  color="bg-blue-500" />
-            <DashboardCard title="Revenue"   value={projectData?.revenue || '0'} color="bg-green-500" />
+            <DashboardCard title="Total Project"   value={projectData.data?.projectCount || '0'}  color="bg-blue-500" />
+            <DashboardCard title="Revenue"   value={projectData.data?.revenue || '0'} color="bg-green-500" />
             <DashboardCard title="Pending" value="0%" color="bg-purple-500" />
           </div>
           
           <div className="bg-white rounded-lg shadow p-4 mb-4">
             <h2 className="text-lg font-medium mb-4">Recent Activity</h2>
             <div className="space-y-3">
-              {/* <ActivityItem 
-                title="New user registered"
-                time="2 minutes ago"
-                description="John Smith created a new account"
-              />
-              <ActivityItem 
-                title="Sales report generated"
-                time="1 hour ago"
-                description="Weekly sales report was automatically generated"
-              />
-              <ActivityItem 
-                title="Server maintenance"
-                time="5 hours ago"
-                description="Server maintenance completed successfully"
-              /> */}
-            <ul>
-  {Array.isArray(activityData?.data).lenght ? (
+<ul>
+  {Array.isArray(activityData.data) && activityData.data.length > 0 ? (
     activityData.data.map((activity) => (
-      <li key={activity.id}>{activity.description}</li>
+      <li key={activity._id}>
+        <ActivityItem
+          title={activity.title}
+          time={`${formatDistanceToNow(new Date(activity.timestamp), { addSuffix: true })}`}
+          description={activity.description}
+        />
+      </li>
     ))
   ) : (
     <li>No activity found.</li>
   )}
 </ul>
+
+
 
             </div>
           </div>
@@ -134,10 +129,10 @@ function ActivityItem({ title, time, description }) {
   return (
     <div className="border-b border-gray-100 pb-2">
       <div className="flex justify-between">
-        <h4 className="text-sm font-medium">{title}</h4>
+        <h4 className="text-sm font-medium max-w-xs truncate">{title}</h4>
         <span className="text-xs text-gray-500">{time}</span>
       </div>
-      <p className="text-sm text-gray-600">{description}</p>
+      <p className="text-sm text-gray-600 max-w-xs truncate">{description}</p>
     </div>
   );
 }
