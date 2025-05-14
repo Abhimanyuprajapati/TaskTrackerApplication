@@ -5,9 +5,9 @@ import { formatDistanceToNow } from 'date-fns';
 
 
 export const Dashboard = () => {
-     const { projectDetailCount, recentActivity, notification } = useAuth();
+  const { projectDetailCount, recentActivity, notification } = useAuth();
 
- // Use different query keys for each query
+  // Use different query keys for each query
   const { data: projectData, isLoading: projectLoading, isError: projectError } = useQuery({
     queryKey: ['projectCount'],
     queryFn: projectDetailCount,
@@ -18,7 +18,7 @@ export const Dashboard = () => {
     queryFn: recentActivity,
   });
 
-    const { data: notificationData, isLoading: notificationLoading, isError: notificationError } = useQuery({
+  const { data: notificationData, isLoading: notificationLoading, isError: notificationError } = useQuery({
     queryKey: ['notification'],
     queryFn: notification,
   });
@@ -28,10 +28,10 @@ export const Dashboard = () => {
   console.log('notificationData:', notificationData);
 
   const data = [
-  { name: 'Client A', projects: 5 },
-  { name: 'Client B', projects: 2 },
-  { name: 'Client C', projects: 6 },
-];
+    { name: 'Client A', projects: 5 },
+    { name: 'Client B', projects: 2 },
+    { name: 'Client C', projects: 6 },
+  ];
 
 
   // console.log("data", data.data);
@@ -40,76 +40,81 @@ export const Dashboard = () => {
   if (projectLoading || activityLoading || notificationLoading) return <p>Loading...</p>;
   if (projectError || activityError || notificationError) return <p>Error loading data</p>;
   return (
-   <>
-    <main className="flex-1 overflow-auto p-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
-            <DashboardCard title="Total Project"   value={projectData.data?.projectCount || '0'}  color="bg-blue-500" />
-            <DashboardCard title="Revenue"   value={projectData.data?.revenue || '0'} color="bg-green-500" />
-            <DashboardCard title="Pending" value="0%" color="bg-purple-500" />
+    <>
+      <main className="flex-1 overflow-auto p-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
+          <DashboardCard title="Total Project" value={projectData.data?.projectCount || '0'} color="bg-blue-500" />
+          <DashboardCard title="Revenue" value={projectData.data?.revenue || '0'} color="bg-green-500" />
+          <DashboardCard title="Pending" value="0%" color="bg-purple-500" />
+        </div>
+
+        <div className="bg-white rounded-lg shadow p-4 mb-4">
+          <h2 className="text-lg font-medium mb-4">Recent Activity</h2>
+          <div className="space-y-3">
+            <ul>
+              {Array.isArray(activityData.data) && activityData.data.length > 0 ? (
+                activityData.data.map((activity) => (
+                  <li key={activity._id}>
+                    <ActivityItem
+                      title={activity.title}
+                      status={activity.action}
+                      time={`${formatDistanceToNow(new Date(activity.timestamp), { addSuffix: true })}`}
+                      description={activity.description}
+                    />
+                  </li>
+                ))
+              ) : (
+                <li>No activity found.</li>
+              )}
+            </ul>
           </div>
-          
-          <div className="bg-white rounded-lg shadow p-4 mb-4">
-            <h2 className="text-lg font-medium mb-4">Recent Activity</h2>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+
+          <div className="bg-white rounded-lg shadow p-4">
+            <h2 className="text-lg font-medium mb-4">Project</h2>
+            <p className="text-gray-600">Sample visualization of Project.</p>
+            <div className="h-48 bg-gray-100 mt-4 rounded">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={data}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="name" />
+                  <YAxis />
+                  <Tooltip />
+                  <Bar dataKey="projects" fill="#3b82f6" />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+
+          <div className="bg-white rounded-lg shadow p-4">
+            <h2 className="text-lg font-medium mb-4">Notifications</h2>
             <div className="space-y-3">
-<ul>
-  {Array.isArray(activityData.data) && activityData.data.length > 0 ? (
-    activityData.data.map((activity) => (
-      <li key={activity._id}>
-        <ActivityItem
-          title={activity.title}
-          status={activity.action}
-          time={`${formatDistanceToNow(new Date(activity.timestamp), { addSuffix: true })}`}
-          description={activity.description}
-        />
-      </li>
-    ))
-  ) : (
-    <li>No activity found.</li>
-  )}
-</ul>
-
-
-
+              {
+                notificationData?.data?.length > 0 ? (
+                  <>
+                    {notificationData?.data?.map((iteme, index) => (
+                      <NotificationItem
+                        key={index}
+                        title={iteme.title}
+                        description={iteme.message}
+                        type={iteme.type}
+                      />
+                    ))}
+                  </>
+                ) :
+                  (
+                    <>
+                      No notification at this time
+                    </>
+                  )
+              }
             </div>
           </div>
-          
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-
-             <div className="bg-white rounded-lg shadow p-4">
-      <h2 className="text-lg font-medium mb-4">Project</h2>
-      <p className="text-gray-600">Sample visualization of Project.</p>
-      <div className="h-48 bg-gray-100 mt-4 rounded">
-        <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={data}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
-            <YAxis />
-            <Tooltip />
-            <Bar dataKey="projects" fill="#3b82f6" />
-          </BarChart>
-        </ResponsiveContainer>
-      </div>
-    </div>
-
-            <div className="bg-white rounded-lg shadow p-4">
-              <h2 className="text-lg font-medium mb-4">Notifications</h2>
-              <div className="space-y-3">
-        
-  {notificationData?.data?.map((iteme, index) => (
-    <NotificationItem
-      key={index}
-      title={iteme.title}
-      description={iteme.message}
-      type={iteme.type} 
-    />
-  ))}
-
-
-              </div>
-            </div>
-          </div>
-        </main>
-   </>
+        </div>
+      </main>
+    </>
   )
 }
 
@@ -126,14 +131,14 @@ function DashboardCard({ title, value, color }) {
   );
 }
 
-function ActivityItem({ title, time, description,status }) {
+function ActivityItem({ title, time, description, status }) {
   return (
     <div className="border-b border-gray-100 pb-2">
       <div className="flex justify-between">
         <h4 className="text-sm font-medium max-w-xs truncate">{title}</h4>
         <span className="text-xs text-gray-500">{time}</span>
       </div>
-       <p className="text-sm text-gray-600 max-w-xs truncate">{status}</p>
+      <p className="text-sm text-gray-600 max-w-xs truncate">{status}</p>
       <p className="text-sm text-gray-600 max-w-xs truncate">{description}</p>
     </div>
   );
@@ -146,7 +151,7 @@ function NotificationItem({ title, description, type }) {
     success: "border-green-500 bg-green-50",
     error: "border-red-500 bg-red-50"
   };
-  
+
   return (
     <div className={`border-l-4 p-3 rounded ${colors[type]}`}>
       <h4 className="text-sm font-medium">{title}</h4>

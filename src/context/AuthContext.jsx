@@ -119,6 +119,15 @@ export const AuthProvider = ({ children }) => {
     }
 };
 
+  const editProject = async (id, data) => {
+     try{
+  const response = await api.patch(`/project/${id}`, data);
+    return response;
+    }catch(error){
+       return error.response;
+    }
+};
+
   const logout = async (data) => {
     const localStorageToken = sessionStorage.getItem("token");
     try {
@@ -143,6 +152,7 @@ export const AuthProvider = ({ children }) => {
         recentActivity,
         markProjectAsComplete,
         createProject,
+        editProject,
         deleteProject,
         notification,
       }}
