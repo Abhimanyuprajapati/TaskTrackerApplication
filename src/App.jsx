@@ -11,7 +11,7 @@ import { Login } from './components/Login';
 import { Privacy } from './components/Privacy';
 import { Terms } from './components/Terms';
 import { ForgotPassword } from './components/ForgotPassword';
-import Register from '../src/components/Register'
+import {Register} from './components/Register.jsx';
 
 function App() {
   return (
@@ -40,57 +40,3 @@ function App() {
 }
 
 export default App;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// import { Routes, Route } from 'react-router-dom';
-// import { Toaster } from 'react-hot-toast';
-// import Login from './components/Login';
-// import Register from './components/register';
-// import Privacy from './components/privacy';
-// import Terms from './components/Terms';
-// import ForgotPassword from './components/ForgotPassword';
-// import ProtectedRoute from './services/ProtectedRoute';
-// import Dashboard from './container/Dashboard';
-// import { ProjectDetail } from './components/ProjectDetail';
-
-// function App() {
-//   return (
-//     <>
-//     <Toaster />
-//     <Routes>
-//       <Route path="/login" element={<Login />} />
-//       <Route path="/register" element={<Register />} />
-//       <Route path="/Privacy" element={<Privacy />} />
-//       <Route path="/terms" element={<Terms />} />
-//       <Route path="/forgot-password" element={<ForgotPassword />} />
-
-//       {/* // Procted route */}
-//       <Route element={<ProtectedRoute />}>
-//       <Route path="/" element={<Dashboard />} />
-//       <Route path="/project" element={<ProjectDetail />} />
-//       </Route>
-    
-//     </Routes>
-//     </>
-//   )
-// }
-
-// export default App
