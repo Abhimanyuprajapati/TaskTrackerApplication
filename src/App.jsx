@@ -8,10 +8,10 @@ import { Setting } from './components/Setting';
 import { Help } from './components/Help';
 import { SingleProject } from './components/SingleProject';
 import { Login } from './components/Login';
-import { Register } from './components/Register';
 import { Privacy } from './components/Privacy';
 import { Terms } from './components/Terms';
 import { ForgotPassword } from './components/ForgotPassword';
+import Register from '../src/components/Register'
 
 function App() {
   return (
@@ -19,7 +19,7 @@ function App() {
       <Toaster />
       <Routes>
         <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
+          <Route path="/register" element={<Register />} />
         <Route path="/privacy" element={<Privacy />} />
         <Route path="/terms" element={<Terms />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
