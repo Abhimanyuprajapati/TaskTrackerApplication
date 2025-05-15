@@ -8,8 +8,8 @@ import { Setting } from './components/Setting';
 import { Help } from './components/Help';
 import { SingleProject } from './components/SingleProject';
 import { Login } from './components/Login';
-import { Register } from './components/register';
-import { Privacy } from './components/privacy';
+import { Register } from './components/Register';
+import { Privacy } from './components/Privacy';
 import { Terms } from './components/Terms';
 import { ForgotPassword } from './components/ForgotPassword';
 
