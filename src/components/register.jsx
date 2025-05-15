@@ -6,7 +6,7 @@ import Toaster from '../toaster/Toaster';
 import Otp from './Otp';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
-function Register() {
+export const Register = () => {
   const { register, otpSender, verifyOTP } = useAuth();
   const navigator = useNavigate();
 
@@ -256,5 +256,3 @@ const [showPassword, setShowPassword] = useState(false);
     </div>
   );
 }
-
-export default Register;

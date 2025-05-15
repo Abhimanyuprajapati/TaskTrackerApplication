@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import Toaster from '../toaster/Toaster';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
-function Login() {
+export const Login = () => {
   const { login } = useAuth();
   const navigator = useNavigate(); // Use useNavigate from react-router-dom
   const [form, setForm] = useState({ identifier: '', password: '' });
@@ -129,4 +129,3 @@ function Login() {
   );
 }
 
-export default Login;

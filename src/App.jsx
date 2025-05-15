@@ -1,10 +1,5 @@
 import { Routes, Route } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
-import Login from './components/Login';
-import Register from './components/register';
-import Terms from './components/Terms';
-import Privacy from './components/Privacy';
-import ForgotPassword from './components/ForgotPassword';
 import ProtectedRoute from './services/ProtectedRoute';
 import { ProjectDetail } from './components/ProjectDetail';
 import { Dashboard } from './components/Dashboard';
@@ -12,6 +7,11 @@ import MainLayout from './container/MainLayout';
 import { Setting } from './components/Setting';
 import { Help } from './components/Help';
 import { SingleProject } from './components/SingleProject';
+import { Login } from './components/Login';
+import { Register } from './components/register';
+import { Privacy } from './components/privacy';
+import { Terms } from './components/Terms';
+import { ForgotPassword } from './components/ForgotPassword';
 
 function App() {
   return (
