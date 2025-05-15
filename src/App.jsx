@@ -11,7 +11,7 @@ import { Login } from './components/Login';
 import { Privacy } from './components/Privacy';
 import { Terms } from './components/Terms';
 import { ForgotPassword } from './components/ForgotPassword';
-import {Register} from './components/Register.jsx';
+import {Register} from '../src/components/Register';
 
 function App() {
   return (
