@@ -2,7 +2,7 @@ import { Routes, Route } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import Login from './components/Login';
 import Register from './components/register';
-import Privacy from './components/privacy';
+import Privacy from './components/Privacy';
 import Terms from './components/Terms';
 import ForgotPassword from './components/ForgotPassword';
 import ProtectedRoute from './services/ProtectedRoute';
