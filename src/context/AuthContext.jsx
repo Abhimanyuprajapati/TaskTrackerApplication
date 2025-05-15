@@ -128,6 +128,15 @@ export const AuthProvider = ({ children }) => {
     }
 };
 
+  const feedback = async (data) => {
+     try{
+  const response = await api.post("/feedback", data);
+    return response;
+    }catch(error){
+       return error.response;
+    }
+};
+
   const logout = async (data) => {
     const localStorageToken = sessionStorage.getItem("token");
     try {
@@ -153,6 +162,7 @@ export const AuthProvider = ({ children }) => {
         markProjectAsComplete,
         createProject,
         editProject,
+        feedback,
         deleteProject,
         notification,
       }}

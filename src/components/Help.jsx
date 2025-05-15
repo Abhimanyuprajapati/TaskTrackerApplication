@@ -1,7 +1,34 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Mail, Phone, BookOpen, AlertCircle } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
+import Toaster from '../toaster/Toaster';
 
 export const Help = () => {
+  const { feedback } = useAuth();
+  const [isfeedbackSent, setIsFeedbackSent] = useState('');
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    // Check if feedback is not empty
+    if (!isfeedbackSent.trim()) {
+      Toaster("Please enter your feedback before submitting.", "failure");
+      return;
+    }
+
+    const response = await feedback({ feedback: isfeedbackSent });
+    
+    if (response.status === 200) {
+      Toaster("Our team will contact you as soon as possible.", "success");
+      setIsFeedbackSent('');  // Clear the form after successful submission
+    } else {
+      Toaster("An unexpected error occurred while sending feedback.", "failure");
+    }
+  };
+
+  const handleChange = (e) => {
+    setIsFeedbackSent(e.target.value);
+  };
+
   return (
     <div className="p-4  overflow-auto mx-auto">
       <h1 className="text-3xl font-bold text-gray-800 mb-6">Help & Support</h1>
@@ -16,7 +43,7 @@ export const Help = () => {
           </div>
           <p className="text-gray-600 mb-2">Need assistance? Our team is here to help.</p>
           <p className="text-gray-700 mb-1">
-            📧 Email: <a href="mailto:support@example.com" className="text-blue-500 hover:underline">support@example.com</a>
+            📧 Email: <a href="mailto:support@example.com" className="text-blue-500 hover:underline">tasktracker@gmail.com</a>
           </p>
           <p className="text-gray-700">
             ☎️ Phone: <span className="text-blue-500">+1 800-123-4567</span>
@@ -59,17 +86,19 @@ export const Help = () => {
             <h2 className="text-xl font-semibold">Give Feedback</h2>
           </div>
           <p className="text-gray-700 mb-3">We value your feedback to improve our service.</p>
-          <form className="space-y-3">
+          <form className="space-y-3" onSubmit={handleSubmit}>
             <textarea
               className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="Your feedback..."
               rows="4"
+               value={isfeedbackSent}
+              onChange={handleChange}
             />
             <button
               type="submit"
               className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
             >
-              Submit
+               Submit Feedback
             </button>
           </form>
         </div>
