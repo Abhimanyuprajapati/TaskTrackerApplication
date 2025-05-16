@@ -1,17 +1,17 @@
 import { Routes, Route } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
-import ProtectedRoute from './services/ProtectedRoute';
 import { ProjectDetail } from './components/ProjectDetail';
 import { Dashboard } from './components/Dashboard';
 import MainLayout from './container/MainLayout';
 import { Setting } from './components/Setting';
 import { Help } from './components/Help';
 import { SingleProject } from './components/SingleProject';
-import { Login } from './components/Login';
-import { Privacy } from './components/Privacy';
-import { Terms } from './components/Terms';
-import { ForgotPassword } from './components/ForgotPassword';
-import {Register} from '../src/components/Register';
+import Login from './components/Login';
+import Register from './components/register';
+import Privacy from './components/Privacy';
+import Terms from './components/Terms';
+import ForgotPassword from './components/ForgotPassword';
+import ProtectedRoute from './services/ProtectedRoute'
 
 function App() {
   return (
@@ -19,7 +19,7 @@ function App() {
       <Toaster />
       <Routes>
         <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
+        <Route path="/register" element={<Register />} />
         <Route path="/privacy" element={<Privacy />} />
         <Route path="/terms" element={<Terms />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />

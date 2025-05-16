@@ -47,7 +47,8 @@ const linkStyle = {
 };
 
 
-export const Terms = () => {
+// export const Terms = () => {
+  function Terms() {
   return (
     <div style={bodyStyle}>
       <div style={containerStyle}>
@@ -95,3 +96,4 @@ export const Terms = () => {
   );
 }
 
+export default Terms;

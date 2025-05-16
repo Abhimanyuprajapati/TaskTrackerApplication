@@ -50,7 +50,7 @@ const linkHoverStyle = {
   textDecoration: 'underline',
 };
 
-export const Privacy = () => {
+function Privacy() {
   return (
     <div style={bodyStyle}>
       <div style={containerStyle}>
@@ -98,3 +98,4 @@ export const Privacy = () => {
   );
 }
 
+export default Privacy;
