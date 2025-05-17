@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import { Menu, X, Home, LogOut, BarChart2, Settings, HelpCircle } from 'lucide-react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
-
+import { useAuth } from '../context/AuthContext';
+import { UserCircle } from 'lucide-react';
 
 export default function MainLayout () {
  
+  const { profilePic } = useAuth();
      const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);    
 
@@ -45,14 +47,6 @@ export default function MainLayout () {
           </button>
         </div>
         
-        {/* <nav className="mt-5 px-2">
-          <SidebarLink icon={<Home size={20} />} label="Home" active />
-          <SidebarLink icon={<BarChart2 size={20} />} label="Project" onClick={handleRedireact}/>
-          <SidebarLink icon={<Settings size={20} />} label="Settings" />
-          <SidebarLink icon={<HelpCircle size={20} />} label="Help" />
-          <SidebarLink icon={<LogOut size={20} />} label="Logout"  onClick={handleLogout}/>
-        </nav> */}
-
         <nav className="mt-5 px-2">
   <SidebarLink icon={<Home size={20} />} label="Home" to="/" />
   <SidebarLink icon={<BarChart2 size={20} />} label="Project" to="/project" />
@@ -79,10 +73,17 @@ export default function MainLayout () {
               <Menu size={24} />
             </button>
             <div className="text-lg font-medium">TaskTracker Application</div>
-            <div className="h-8 w-8 rounded-full bg-gray-300">
-              {/*User Avatar Placeholder */}
-        
-            </div>
+    <div className="h-8 w-8 rounded-full overflow-hidden">
+      {profilePic ? (
+        <img
+          src={profilePic}
+          alt="Profile"
+          className="h-full w-full object-cover"
+        />
+      ) : (
+        <UserCircle className="text-gray-400 w-full h-full" />
+      )}
+    </div>
           </div>
         </header>
         
@@ -94,23 +95,6 @@ export default function MainLayout () {
     </div>
   );
 }
-
-// Helper Components
-// function SidebarLink({ icon, label, active = false, onClick }) {
-//   return (
-//     <a 
-//       href="#" 
-//       onClick={onClick}
-//       className={`
-//         flex items-center px-4 py-2 mt-1 text-sm rounded-md 
-//         ${active ? 'bg-gray-700' : 'hover:bg-gray-700'}
-//       `}
-//     >
-//       <span className="mr-3">{icon}</span>
-//       <span>{label}</span>
-//     </a>
-//   );
-// }
 
 function SidebarLink({ icon, label, to, customClick }) {
   const location = useLocation();

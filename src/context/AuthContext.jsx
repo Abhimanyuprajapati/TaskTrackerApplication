@@ -1,9 +1,11 @@
-import React, { createContext, useContext } from "react";
+import React, { createContext, useContext, useState } from "react";
 import api from "./axios";
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
+
+   const [profilePic, setProfilePic] = useState(null);
 
   const login = async (data) => {
     try {
@@ -137,6 +139,28 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const getProfile = async () => {
+    try {
+      const response = await api.get("/profile-pic");
+      return response;
+    } catch (error) {
+      return error.response;
+    }
+  };
+
+  const updateProfile = async (data) => {
+    try {
+      const response = await api.post("/update-profile", data, {
+          headers: {
+        'Content-Type': 'multipart/form-data', 
+      },
+      });
+      return response;
+    } catch (error) {
+      return error.response;
+    }
+  };
+
   const logout = async (data) => {
     const localStorageToken = sessionStorage.getItem("token");
     try {
@@ -163,8 +187,12 @@ export const AuthProvider = ({ children }) => {
         createProject,
         editProject,
         feedback,
+        updateProfile,
         deleteProject,
+        getProfile,
         notification,
+        profilePic,
+        setProfilePic,
       }}
     >
       {children}

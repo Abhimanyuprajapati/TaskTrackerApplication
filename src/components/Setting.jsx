@@ -1,82 +1,138 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
+import { UserCircle, Pencil } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
+import { useQuery } from '@tanstack/react-query';
+import Toaster from '../toaster/Toaster';
 
 export const Setting = () => {
-  return (
-    <div className="p-4  overflow-auto mx-auto">
-      <h1 className="text-3xl font-bold text-gray-800 mb-6">Account Settings</h1>
+  const { getProfile, setProfilePic, updateProfile } = useAuth();
+  const fileInputRef = useRef(null);
 
-      {/* Profile Info */}
-      <div className="bg-white rounded-lg shadow p-6 mb-6">
-        <h2 className="text-xl font-semibold text-gray-700 mb-4">Profile Information</h2>
-        <form className="grid grid-cols-1 md:grid-cols-2 gap-4">
+  const {
+    data: getProfileData,
+    isLoading: getProfileLoading,
+    isError: getProfileError,
+    refetch,
+  } = useQuery({
+    queryKey: ['getProfile'],
+    queryFn: getProfile,
+  });
+
+    const { name, email, country, profilePic } = getProfileData?.data.user || {};
+
+   const handleIconClick = () => {
+    fileInputRef.current?.click();
+  };
+
+ const toBase64 = (file) => new Promise((resolve, reject) => {
+  const reader = new FileReader();
+  reader.readAsDataURL(file);
+  reader.onload = () => resolve(reader.result);
+  reader.onerror = (error) => reject(error);
+});
+
+const handleFileChange = async (e) => {
+  const file = e.target.files?.[0];
+  if (!file) return;
+
+  const formData = new FormData();
+  formData.append('profilePic', file);
+
+  try {
+    const response = await updateProfile(formData); 
+    if (response.status === 200) {
+      const base64 = await toBase64(file);
+      setProfilePic(base64); // Show new image immediately
+      refetch(); // Optionally re-fetch from server
+      Toaster("Profile picture updated successfully", "success");
+    } else {
+      Toaster(response.data?.message || "Update failed", "failure");
+    }
+  } catch (error) {
+    Toaster("An error occurred while uploading", "failure");
+  }
+};
+
+    useEffect(() => {
+    if (getProfileData?.data?.user?.profilePic) {
+      setProfilePic(getProfileData.data.user.profilePic);
+    }
+  }, [getProfileData, setProfilePic]);
+
+  if (getProfileLoading) return <p className="text-center mt-10">Loading profile...</p>;
+  if (getProfileError) return <p className="text-center mt-10 text-red-500">Something went wrong while fetching the profile.</p>;
+ 
+  return (
+    <div className="flex-1 overflow-auto p-4">
+      <h1 className="text-3xl font-bold text-gray-800 mb-8">Account Settings</h1>
+
+      <div className="bg-white rounded-xl shadow-lg p-6 space-y-6">
+        <h2 className="text-2xl font-semibold text-gray-700">Profile Information</h2>
+
+        {/* Profile Picture Section with Pencil Icon */}
+        <div className="relative w-20 h-20">
+          {profilePic ? (
+            <img
+              src={profilePic}
+              alt="Profile"
+              className="w-20 h-20 rounded-full border border-gray-300 object-cover shadow-sm"
+            />
+          ) : (
+            <UserCircle className="w-20 h-20 text-gray-400" />
+          )}
+          <button
+    onClick={handleIconClick}
+    className="absolute bottom-0 right-0 p-1 bg-white rounded-full shadow hover:bg-gray-100"
+    title="Change profile picture"
+  >
+    <Pencil className="w-4 h-4 text-gray-600" />
+  </button>
+         <input
+    type="file"
+    accept="image/*"
+    ref={fileInputRef}
+    onChange={handleFileChange}
+    className="hidden"
+  />
+        </div>
+
+        {/* Info Fields (Disabled) */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <label className="block text-gray-600">First Name</label>
+            <label className="block text-gray-600 mb-1">Name</label>
             <input
               type="text"
-              placeholder="John"
-              className="w-full mt-1 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              value={name || ''}
+              disabled
+              className="w-full p-2 border border-gray-300 rounded bg-gray-100 cursor-not-allowed text-gray-600"
             />
           </div>
           <div>
-            <label className="block text-gray-600">Last Name</label>
-            <input
-              type="text"
-              placeholder="Doe"
-              className="w-full mt-1 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-          <div>
-            <label className="block text-gray-600">Email</label>
+            <label className="block text-gray-600 mb-1">Email</label>
             <input
               type="email"
-              placeholder="john@example.com"
-              className="w-full mt-1 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              value={email || ''}
+              disabled
+              className="w-full p-2 border border-gray-300 rounded bg-gray-100 cursor-not-allowed text-gray-600"
             />
           </div>
           <div>
-            <label className="block text-gray-600">Phone</label>
+            <label className="block text-gray-600 mb-1">Country</label>
             <input
-              type="tel"
-              placeholder="+1 234 567 8901"
-              className="w-full mt-1 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              type="text"
+              value={country || ''}
+              disabled
+              className="w-full p-2 border border-gray-300 rounded bg-gray-100 cursor-not-allowed text-gray-600"
             />
           </div>
-        </form>
-      </div>
-
-      {/* Password Change */}
-      <div className="bg-white rounded-lg shadow p-6 mb-6">
-        <h2 className="text-xl font-semibold text-gray-700 mb-4">Change Password</h2>
-        <form className="space-y-4">
-          <div>
-            <label className="block text-gray-600">Current Password</label>
-            <input
-              type="password"
-              className="w-full mt-1 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-          <div>
-            <label className="block text-gray-600">New Password</label>
-            <input
-              type="password"
-              className="w-full mt-1 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-          <div>
-            <label className="block text-gray-600">Confirm New Password</label>
-            <input
-              type="password"
-              className="w-full mt-1 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-        </form>
+        </div>
       </div>
 
       {/* Save Button */}
-      <div className="flex justify-end">
+      <div className="flex justify-end mt-6">
         <button
           type="submit"
-          className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700"
+          className="bg-blue-600 text-white px-6 py-2 rounded-lg shadow hover:bg-blue-700 transition-all"
         >
           Save Changes
         </button>
