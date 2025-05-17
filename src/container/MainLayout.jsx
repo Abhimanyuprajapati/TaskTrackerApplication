@@ -16,7 +16,7 @@ export default function MainLayout () {
     navigate('/project');
   }
     const handleLogout = () => {
-    localStorage.removeItem('token');
+    sessionStorage.removeItem('token');
     window.location.href = '/login';
   }
   return (
